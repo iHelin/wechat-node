@@ -1,9 +1,8 @@
-//获取accessToken，有效期2小时
-const {appID, appsecret} = require('../config')
-
 const rp = require('request-promise-native')
-
 const {writeFile, readFile} = require('fs')
+
+const {appID, appsecret} = require('../config')
+const menu = require('./menu')
 
 class Wechat {
     constructor() {
@@ -23,9 +22,9 @@ class Wechat {
                 res.expires_in = Date.now() + (res.expires_in - 300) * 1000;
                 resolve(res);
             }).catch(err => {
-                reject('getAccessToken请求失败' + err)
-            })
-        })
+                reject('getAccessToken请求失败' + err);
+            });
+        });
     }
 
     /**
@@ -35,7 +34,7 @@ class Wechat {
      */
     saveAccessToken(accessToken) {
         //将对象转换为字符串
-        accessToken = JSON.stringify(accessToken)
+        accessToken = JSON.stringify(accessToken);
         //将access_token保存文件
         return new Promise((resolve, reject) => {
             writeFile('./accessToken.txt', accessToken, err => {
@@ -60,7 +59,7 @@ class Wechat {
                 if (err) {
                     reject("readAccessToken" + err);
                 } else {
-                    console.log("文件读取成功");
+                    console.log("读取本地accessToken成功");
                     data = JSON.parse(data);
                     resolve(data);
                 }
@@ -75,16 +74,15 @@ class Wechat {
      * @returns {boolean}
      */
     isValidAccessToken(data) {
-        //验证传入的参数是否是有效的
         if (!data || !data.access_token || !data.expires_in) {
-            return false
+            return false;
         }
         //检测access_token是否在有效期内
         return data.expires_in > Date.now();
     }
 
     /**
-     * 用来获取没有过期的access_token
+     * 获取没有过期的access_token
      * @returns {Promise<{access_token: unknown.access_token, express_in: unknown.expires_in}>|Promise<PromiseConstructor.resolve>}
      */
     fetchAccessToken() {
@@ -93,37 +91,67 @@ class Wechat {
             return Promise.resolve({
                 access_token: this.access_token,
                 express_in: this.expires_in
-            })
+            });
         }
         return this.readAccessToken().then(async res => {
             //本地有文件
             if (this.isValidAccessToken(res)) {
-                return Promise.resolve(res)
+                return Promise.resolve(res);
             } else {
-                const res = await this.getAccessToken()
-                //保存至本地
-                await this.saveAccessToken(res)
-                return Promise.resolve(res)
+                const res = await this.getAccessToken();
+                await this.saveAccessToken(res);
+                return Promise.resolve(res);
             }
         }).catch(async err => {
             const res = await this.getAccessToken();
             await this.saveAccessToken(res);
             return Promise.resolve(res);
         }).then(res => {
-            this.access_token = res.access_token
-            this.expires_in = res.expires_in
-            return Promise.resolve(res)
+            this.access_token = res.access_token;
+            this.expires_in = res.expires_in;
+            return Promise.resolve(res);
         });
+    }
+
+    createMenu(menu) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const data = await this.fetchAccessToken()
+                const url = `https://api.weixin.qq.com/cgi-bin/menu/create?access_token=${data.access_token}`;
+                const result = await rp({method: 'POST', url, json: true, body: menu});
+                resolve(result);
+            } catch (e) {
+                reject('createMenu', e);
+            }
+        })
+    }
+
+    deleteMenu() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const data = await this.fetchAccessToken()
+                const url = `https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=${data.access_token}`;
+                const result = await rp({method: 'GET', url, json: true});
+                resolve(result);
+            } catch (e) {
+                reject('deleteMenu', e);
+            }
+        })
     }
 }
 
 
 //模拟测试
-const w = new Wechat()
 
-w.fetchAccessToken().then(res => {
-    console.log('AccessToken:', res);
-}).catch(err => {
-    console.log(err);
-})
+(async () => {
+    const w = new Wechat()
 
+// w.fetchAccessToken().then(res => {
+//     console.log('AccessToken:', res);
+// }).catch(err => {
+//     console.log(err);
+// })
+    let delRes = await w.deleteMenu();
+    const res = await w.createMenu(menu);
+    console.log(delRes, res);
+})()
