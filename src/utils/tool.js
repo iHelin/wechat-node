@@ -21,10 +21,11 @@ module.exports = {
 
     parserXMLDataAsync(xmlData) {
         return new Promise((resolve, reject) => {
-            parseString(xmlData, {trim: true}, function (err, result) {
+            parseString(xmlData, {trim: true}, (err, result) => {
                 if (!err) {
                     resolve(result);
                 } else {
+                    console.log("parserXMLData方法出错了" + err);
                     reject("parserXMLData方法出错了" + err);
                 }
             });
