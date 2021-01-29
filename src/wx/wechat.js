@@ -43,7 +43,7 @@ class Wechat {
      * @returns {Promise<unknown>}
      */
     readAccessToken() {
-        return readFileAsync('./accessToken.txt');
+        return readFileAsync('accessToken.txt');
     }
 
 
@@ -127,7 +127,7 @@ class Wechat {
      * @returns {Promise<unknown>}
      */
     readTicket() {
-        return readFileAsync('./ticket.txt');
+        return readFileAsync('ticket.txt');
     }
 
 
@@ -206,19 +206,19 @@ class Wechat {
 
 //模拟测试
 
-/*(async () => {
-    const w = new Wechat()
+// (async () => {
+//     const w = new Wechat()
 
-    // let token = await w.fetchAccessToken();
-    // console.log(token);
+// let token = await w.fetchAccessToken();
+// console.log(token);
 
-    // const res = await w.fetchTicket();
-    // console.log(res);
+// const res = await w.fetchTicket();
+// console.log(res);
 
-    let res = await w.deleteMenu();
-    console.log(res);
-    res = await w.createMenu(menu);
-    console.log(res);
-})();*/
+// let res = await w.deleteMenu();
+// console.log(res);
+// res = await w.createMenu(menu);
+// console.log(res);
+// })();
 
 module.exports = Wechat;
