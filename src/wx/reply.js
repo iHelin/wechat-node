@@ -48,7 +48,7 @@ module.exports = (message) => {
         } else if (message.Event === 'SCAN') {
             content = '用户已经关注过，再次扫描带参数的二维码';
         } else if (message.Event === 'LOCATION') {
-            content = `您的纬度：${message.Latitude}、经度：${message.Longitude}、位置精度：${message.Precision}`;
+            // content = `您的纬度：${message.Latitude}、经度：${message.Longitude}、位置精度：${message.Precision}`;
         } else if (message.Event === 'CLICK') {
             content = '您点击了按钮';
         }

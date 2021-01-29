@@ -1,5 +1,7 @@
 //工具函数
 const {parseString} = require('xml2js')
+const {writeFile, readFile} = require('fs')
+const path = require('path');
 
 module.exports = {
     getUserDataAsync(req) {
@@ -36,5 +38,33 @@ module.exports = {
             }
         }
         return jsData;
+    },
+
+    writeFileAsync(data, filename) {
+        return new Promise((resolve, reject) => {
+            writeFile(path.resolve(__dirname, filename), JSON.stringify(data), err => {
+                if (err) {
+                    console.log("writeFileAsync" + err);
+                    reject(err);
+                } else {
+                    console.log("文件保存成功");
+                    resolve();
+                }
+            });
+        });
+    },
+
+    readFileAsync(filename) {
+        return new Promise((resolve, reject) => {
+            readFile(path.resolve(__dirname, filename), (err, data) => {
+                if (err) {
+                    reject("readFileAsync" + err);
+                } else {
+                    console.log(`读取本地${filename}成功`);
+                    data = JSON.parse(data);
+                    resolve(data);
+                }
+            })
+        })
     }
 }
