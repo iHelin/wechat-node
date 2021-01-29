@@ -1,13 +1,13 @@
 {
-    "name": "wx",
+    "name": "wechat-node",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "app.js",
     "scripts": {
         "start": "node app.js"
     },
-    "author": "czk",
-    "license": "ISC",
+    "author": "iHelin",
+    "license": "MIT",
     "dependencies": {
         "ejs": "^3.1.5",
         "express": "^4.17.1",
