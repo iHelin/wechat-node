@@ -1,4 +1,4 @@
-const ok = require('./ok');
+const {sentences, hitokoto} = require('./ok');
 /**
  * 处理用户发送的消息，返回不同的内容
  */
@@ -12,8 +12,8 @@ module.exports = async (message) => {
 
     let content = '';
     if (message.MsgType === 'text') {
-        content = await ok();
-        content = content.result.name;
+        content = await sentences();
+        content = content.result.name + '\n' + content.result.from;
     } else if (message.MsgType === 'image') {
         options.msgType = 'image';
         options.mediaId = message.MediaId;
@@ -46,7 +46,14 @@ module.exports = async (message) => {
         } else if (message.Event === 'LOCATION') {
             // content = `您的纬度：${message.Latitude}、经度：${message.Longitude}、位置精度：${message.Precision}`;
         } else if (message.Event === 'CLICK') {
-            content = '您点击了按钮';
+            if (message.EventKey === 'sentences') {
+                let res = await sentences();
+                content = res.result.name + '\n出自：' + res.result.from;
+            } else if (message.EventKey === 'hitokoto') {
+                content = await hitokoto();
+            } else {
+                content = '你点了啥';
+            }
         }
     }
 
