@@ -1,8 +1,6 @@
 const rp = require('request-promise-native')
 
-
 const {appID, appsecret} = require('../config')
-const menu = require('./menu')
 const api = require('../utils/api');
 const {writeFileAsync, readFileAsync} = require('../utils/tool')
 
@@ -202,23 +200,5 @@ class Wechat {
         })
     }
 }
-
-
-//模拟测试
-
-// (async () => {
-//     const w = new Wechat()
-
-// let token = await w.fetchAccessToken();
-// console.log(token);
-
-// const res = await w.fetchTicket();
-// console.log(res);
-
-// let res = await w.deleteMenu();
-// console.log(res);
-// res = await w.createMenu(menu);
-// console.log(res);
-// })();
 
 module.exports = Wechat;

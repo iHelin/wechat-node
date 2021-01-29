@@ -1,7 +1,8 @@
+const ok = require('./ok');
 /**
  * 处理用户发送的消息，返回不同的内容
  */
-module.exports = (message) => {
+module.exports = async (message) => {
     let options = {
         toUserName: message.FromUserName,
         fromUserName: message.ToUserName,
@@ -11,13 +12,8 @@ module.exports = (message) => {
 
     let content = '';
     if (message.MsgType === 'text') {
-        if (message.Content === '1') {   //全匹配
-            content = '哈哈哈';
-        } else if (message.Content === '2') {
-            content = '呵呵呵';
-        } else {
-            content = '你说啥？';
-        }
+        content = await ok();
+        content = content.result.name;
     } else if (message.MsgType === 'image') {
         options.msgType = 'image';
         options.mediaId = message.MediaId;
@@ -55,6 +51,6 @@ module.exports = (message) => {
     }
 
     options.content = content;
-    // console.log(options);
+    console.log(options);
     return options;
 }

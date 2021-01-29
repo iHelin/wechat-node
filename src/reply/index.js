@@ -29,9 +29,10 @@ module.exports = () => {
                 //格式化数据
                 const message = formatMessage(jsData)
 
-                const options = reply(message);
+                const options = await reply(message);
 
                 const replyMessage = template(options);
+                console.log(replyMessage);
                 res.send(replyMessage);
             } else {
                 res.end('error');

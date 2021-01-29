@@ -5,7 +5,7 @@ const menus = {
         "name": "🔍搜索",
         "url": "http://helinux.cn1.utools.club/search"
     }, {
-        "name": "❎菜单",
+        "name": "😆来一句",
         "sub_button": [{
             "type": "click",
             "name": "没啥",
@@ -25,14 +25,3 @@ const menus = {
     res = await wechat.createMenu(menus);
     console.log(res);
 })();
-
-
-/*
-{
-        "type": "click",
-        "name": "未定义",
-        "key": "V1001_TODAY_MUSIC"
-    }
- */
-
-// module.exports = menus;

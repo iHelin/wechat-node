@@ -37,12 +37,7 @@
                             localId: localId, // 需要识别的音频的本地Id，由录音相关接口获得
                             isShowProgressTips: 1, // 默认为1，显示进度提示
                             success: function (res) {
-                                // alert(res.translateResult); // 语音识别的结果
-                                let url = 'http://api.douban.com/v2/movie/search?q=' + res.translateResult;
-                                $.getJSON(url, function (data) {
-                                    console.log(data);
-                                    alert(data.total);
-                                })
+                                alert(res.translateResult); // 语音识别的结果
                             }
                         });
                     }
