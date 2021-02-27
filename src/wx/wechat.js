@@ -1,4 +1,4 @@
-const rp = require('request-promise-native')
+const axios = require('axios')
 
 const {appID, appsecret} = require('../config')
 const api = require('../utils/api');
@@ -16,7 +16,7 @@ class Wechat {
     getAccessToken() {
         const url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${appID}&secret=${appsecret}`;
         return new Promise((resolve, reject) => {
-            rp({method: 'GET', url, json: true}).then(res => {
+            axios.get(url).then(res => {
                 console.log("远程获取accessToken");
                 //设置过期时间-5分钟
                 res.expires_in = Date.now() + (res.expires_in - 300) * 1000;
@@ -98,7 +98,7 @@ class Wechat {
         return new Promise(async (resolve, reject) => {
             const data = await this.fetchAccessToken();
             const url = `${api.ticket}&access_token=${data.access_token}`;
-            rp({method: 'GET', url, json: true}).then(res => {
+            axios.get(url).then(res => {
                 console.log("远程获取Ticket");
                 //设置过期时间-5分钟
                 resolve({
@@ -179,7 +179,7 @@ class Wechat {
             try {
                 const data = await this.fetchAccessToken()
                 const url = `https://api.weixin.qq.com/cgi-bin/menu/create?access_token=${data.access_token}`;
-                const result = await rp({method: 'POST', url, json: true, body: menu});
+                const result = await axios.post(url, menu);
                 resolve(result);
             } catch (e) {
                 reject('createMenu', e);
@@ -192,7 +192,7 @@ class Wechat {
             try {
                 const data = await this.fetchAccessToken()
                 const url = `https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=${data.access_token}`;
-                const result = await rp({method: 'GET', url, json: true});
+                const result = await axios.get(url);
                 resolve(result);
             } catch (e) {
                 reject('deleteMenu', e);

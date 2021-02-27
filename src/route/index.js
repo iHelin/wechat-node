@@ -3,6 +3,7 @@ const sha1 = require('sha1');
 const Wechat = require('../wx/wechat')
 const {appID, url} = require('../config')
 const reply = require('../reply')
+const {sentences, hitokoto} = require('../reply/ok');
 
 const router = express.Router();
 const wechat = new Wechat();
@@ -26,6 +27,11 @@ router.get('/search', async (req, res) => {
     const signature = sha1(str);
 
     res.render('search', {appID, signature, nonceStr, timestamp});
+});
+router.get('/', async (req, res) => {
+    let response = await sentences();
+    console.log(response.data);
+    res.send(response.data);
 });
 router.use(reply());
 

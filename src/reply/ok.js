@@ -1,13 +1,13 @@
-const rp = require('request-promise-native')
+const axios = require('axios')
 
 module.exports = {
     sentences() {
         let url = `http://poetry.apiopen.top/sentences`;
-        return rp({method: 'GET', url, json: true});
+        return axios.get(url);
     },
 
     hitokoto() {
         let url = `https://api.imjad.cn/hitokoto`;
-        return rp({method: 'GET', url, json: true});
+        return axios.get(url);
     }
 }
