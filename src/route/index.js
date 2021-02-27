@@ -30,7 +30,6 @@ router.get('/search', async (req, res) => {
 });
 router.get('/', async (req, res) => {
     let response = await sentences();
-    console.log(response.data);
     res.send(response.data);
 });
 router.use(reply());
